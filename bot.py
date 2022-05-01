@@ -1,3 +1,4 @@
+# Import libraries/modules
 import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv 
@@ -17,12 +18,14 @@ from newsapi import NewsApiClient
 from bs4 import BeautifulSoup
 import requests
 
+# Configures Discord and Newsapi tokens in CONFIG.py
 DISCORD_TOKEN = CONFIG.VARIABLES['DISCORD_TOKEN']
-
 NEWSAPI_TOKEN = CONFIG.VARIABLES['NEWSAPI_TOKEN']
 newsapi = NewsApiClient(api_key=NEWSAPI_TOKEN)
 
+# Sets the discord bot command prefix
 bot = commands.Bot(command_prefix='!')
+
 daily_news_dict = set()
 
 @bot.event
@@ -47,7 +50,6 @@ def get_news(source="bbc-news"):
         embed.add_field(name=l["title"], value=l["description"], inline=False)
         embed.add_field(name=l["url"], value=l["publishedAt"], inline=False)
     return embed
-
 
 @tasks.loop(hours=24)
 async def called_once_a_day():
@@ -125,7 +127,7 @@ async def chart(ctx, quo="msft"):
     old_date = str(old_year) + '-' + current_date_arr[1] + '-' + current_date_arr[2]
 
     data = get_data(quo, old_date, current_date)
-    # Clears the graoh before creating a new one
+    # Clears the graph before creating a new one
     plt.clf()
 
     # Plots the graph and stores it in a variable
